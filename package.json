@@ -1,5 +1,5 @@
 {
-  "homepage" : "http://[GitHubの名前].github.io/[リポジトリ名]",
+  
   "name": "ec-app",
   "version": "0.1.0",
   "private": true,
