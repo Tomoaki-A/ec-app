@@ -15,7 +15,7 @@ const TextInput = (props) => {
         // 必須項目かどうか
         required={props.required}
         // maltilineを許可した際に初めから何行表示するか
-        roes={props.rows}
+        rows={props.rows}
         value={props.value}
         // textとかpasswordとかemailとか指定できる
         type ={props.type}

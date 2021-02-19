@@ -1,7 +1,61 @@
-import { signInAction } from "./actions";
+import { signInAction, signOutAction } from "./actions";
 import { push } from "connected-react-router";
 import { auth, db, FirebaseTimestamp } from "../../firebase/index";
 
+// リッスン
+export const listenAuthState = () => {
+  // redux-thunkの基本形
+  return async (dispatch) => {
+    // りた〜ん
+    return auth.onAuthStateChanged((user) => {
+      // userが存在していたら(userが認証完了されていたら)
+      if (user) {
+        // サインイン時と同じ処理
+        const uid = user.uid;
+        db.collection("users")
+          .doc(uid)
+          .get()
+          .then((snapshot) => {
+            const data = snapshot.data();
+            dispatch(
+              signInAction({
+                isSignedIn: true,
+                role: data.role,
+                uid: uid,
+                username: data.username,
+              })
+            );
+          });
+          // userが存在していなかったら(userが認証完了したいなかったら)
+      } else {
+        // サインイン画面へ飛ばす
+        dispatch(push("/signin"));
+      }
+    });
+  };
+};
+
+// パスワードリセット
+export const resetPassword = (email) => {
+  return async (dispatch) => {
+    if (email === "") {
+      alert("必須項目が未入力です")
+      return false
+    } else {
+      // Firebaseのパスワードリセットのメソッド
+      auth.sendPasswordResetEmail(email)
+      .then(() => {
+        alert('入力されたアドレスにパスワードリセット用のメールをお送りしました。')
+        dispatch(push('/signin'))
+      // もし失敗したら
+      }).catch(() => {
+        alert('パスワードリセットに失敗しました。通信環境を確認してください。')
+      })
+    }
+  }
+}
+
+// サインイン
 export const signIn = (email, password) => {
   // redux-thunkのお決まりの形
   return async (dispatch) => {
@@ -43,7 +97,7 @@ export const signIn = (email, password) => {
     });
   };
 };
-
+// サインアップ
 export const signUp = (username, email, password, confirmPassword) => {
   // redux-thunkのお決まりの形
   return async (dispatch) => {
@@ -94,5 +148,18 @@ export const signUp = (username, email, password, confirmPassword) => {
             });
         }
       });
+  };
+};
+
+// サインアウト
+export const signOut = () => {
+  return async (dispatch) => {
+    // firebaseのsignOutメソッドを呼び出し (firebase的にサインアウト)
+    auth.signOut().then(() => {
+      // reduxのsignOutActionメソッドを呼び出し (Reduxの状態管理的にもサインアウト)
+      dispatch(signOutAction());
+      // サインイン画面に推移
+      dispatch(push("/signin"));
+    });
   };
 };
