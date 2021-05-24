@@ -1,8 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router";
-import { SignIn, Home, SignUp ,Reset, ProductEdit} from "./templates";
-import Auth from "./Auth"
-
+import { SignIn, Home, SignUp, Reset, ProductEdit } from "./templates";
+import Auth from "./Auth";
 
 const Router = () => {
   return (
@@ -10,9 +9,10 @@ const Router = () => {
       <Route exact path={"/signup"} component={SignUp} />
       <Route exact path={"/signin"} component={SignIn} />
       <Route exact path={"/signin/reset"} component={Reset} />
+      {/* Authコンポーネントでラップすることでラップされたコンポーネントへのアクセスはサインインしている必要がある */}
       <Auth>
         <Route exact path={"(/)?"} component={Home} />
-        <Route exact path={"/product/edit"} component={ProductEdit} />
+        <Route path={"/product/edit(/:id)?"} component={ProductEdit} />
       </Auth>
     </Switch>
   );

@@ -20,3 +20,4 @@ export default function createStore(history) {
     applyMiddleware(routerMiddleware(history), thunk)
   );
 }
+

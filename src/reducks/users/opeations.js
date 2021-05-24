@@ -8,7 +8,7 @@ export const listenAuthState = () => {
   return async (dispatch) => {
     // りた〜ん
     return auth.onAuthStateChanged((user) => {
-      // userが存在していたら(userが認証完了されていたら)
+      // userが存在していたら(サインインしていたら)
       if (user) {
         // サインイン時と同じ処理
         const uid = user.uid;

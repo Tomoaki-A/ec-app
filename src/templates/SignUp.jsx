@@ -8,12 +8,7 @@ const SignUp = () => {
   // onClick時にdispatchするのでuseDispatch()を定数化
   const dispatch = useDispatch();
 
-  // hooksの書き方 usestate()
-  // クラスコンポーネントでの
-  // this.state = {
-  //   username: "",
-  // }
-  // と同義
+  // hooksでローカルのstateを管理
   const [username, setUsername] = useState(""),
     [email, setEmail] = useState(""),
     [password, setPassword] = useState(""),
