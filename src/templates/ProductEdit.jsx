@@ -97,7 +97,7 @@ const ProductEdit = () => {
           <PrimaryButton
             label={"商品情報を保存"}
             onClick={() => dispatch(saveProduct(id, name, description, category, gender,  price, sizes, images))}
-            // onClick={() => dispatch(saveProduct(id, name, description, category, gender, price, sizes, images))}
+            
             />
         </div>
       </div>
