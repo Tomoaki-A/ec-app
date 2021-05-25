@@ -66,13 +66,13 @@ const ProductCard = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [anchoEl, setAnchoEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
-    setAnchoEl(event.currentTarget);
+    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchoEl(null);
+    setAnchorEl(null);
   };
 
   const images = props.images.length > 0 ? props.images : [NoImage];
@@ -97,23 +97,23 @@ const ProductCard = (props) => {
           <MoreVertIcon />
         </IconButton>
         <Menu
-          anchoEl={anchoEl}
+          anchorEl={anchorEl}
           keepMounted
-          open={Boolean(anchoEl)}
+          open={Boolean(anchorEl)}
           onClose={handleClose}
         >
           <MenuItem
             onClick={() => {
-              dispatch(push("/product/edit/" + props.id));
-              handleClose();
+              dispatch(push("/product/edit/" + props.id))
+              handleClose()
             }}
           >
             編集する
           </MenuItem>
           <MenuItem
             onClick={() => {
-              dispatch(deleteProduct(props.id));
-              handleClose();
+              dispatch(deleteProduct(props.id))
+              handleClose()
             }}
           >
             削除する
