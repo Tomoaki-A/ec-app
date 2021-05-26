@@ -68,11 +68,11 @@ export const saveProduct = (id, name, description, category, gender, price, size
     }
 
     // set()は全てを更新してしまうので、第２引数に{marge:true}とすることで変更部分のみをset()で変更する
-    return productsRef.doc(id).set(data, {merge: true})
-    .then(() => {
-      dispatch(push('/'))
-    }).catch((error) => {
-      throw new Error(error)
+  return productsRef.doc(id).set(data, {merge: true})
+      .then(() => {
+        dispatch(push('/'))
+      }).catch((error) => {
+        throw new Error(error)
       });
   };
 };
