@@ -38,7 +38,7 @@ const Header = () => {
       <AppBar position="fixed" className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
           <div onClick={() => dispatch(push("/"))}>Home</div>
-          {/* isSignedInがtrueなら表示 */}
+          {/* isSignedInがtrueなら,表示 */}
           {isSignedIn && (
             <div className={classes.iconButtoms}>
               <HeaderMenus />
