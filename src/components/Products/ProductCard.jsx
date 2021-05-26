@@ -66,26 +66,32 @@ const ProductCard = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+
+  // メニューアイコンの実装
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
+  // 実行によってanchorELには商品情報がはいる
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+ 
   const images = props.images.length > 0 ? props.images : [NoImage];
   const price = props.price.toLocaleString();
   return (
     <Card className={classes.root}>
+      {/* 商品一覧の画像部分 */}
       <CardMedia
         className={classes.media}
         image={images[0].path}
-        onClick={() => dispatch(push("/product/" + props.id))}
+        // 画像クリック時idのURLに遷移
+        onClick={() => dispatch(push("/product/edit/" + props.id))}
       />
+      {/* 商品一覧の文字部分  */}
       <CardContent className={classes.content}>
-        <div onClick={() => dispatch(push("/product/" + props.id))}>
+        <div onClick={() => dispatch(push("/product/edit/" + props.id))}>
           <Typography color="textSecondary" component="p">
             {props.name}
           </Typography>
@@ -99,7 +105,9 @@ const ProductCard = (props) => {
         <Menu
           anchorEl={anchorEl}
           keepMounted
+          // ブーリアン型で初期値nullに対し何らかの値があればtrue
           open={Boolean(anchorEl)}
+          // onCloseはここ以外がクリックされた時に発火する
           onClose={handleClose}
         >
           <MenuItem
