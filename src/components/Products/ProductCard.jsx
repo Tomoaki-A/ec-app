@@ -87,7 +87,7 @@ const ProductCard = (props) => {
         className={classes.media}
         image={images[0].path}
         // 画像クリック時idのURLに遷移
-        onClick={() => dispatch(push("/product/edit/" + props.id))}
+        onClick={() => dispatch(push("/product/" + props.id))}
       />
       {/* 商品一覧の文字部分  */}
       <CardContent className={classes.content}>

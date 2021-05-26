@@ -4,26 +4,34 @@ import {fetchProductsAction,deleteProductAction} from './actions'
 
 const productsRef = db.collection("products");
 
+// 引数idのデータをfirebaseから削除する
 export const deleteProduct = (id) => {
   return async(dispatch, getState) => {
+    // idのデータをfirebaseから削除し
     productsRef.doc(id).delete()
       .then(() => {
+        // storeのproductsの状態を取得し
         const prevProducts = getState().products.list;
+        // products全てのstateから該当id以外を抜き出しactionへ
         const nextProducts = prevProducts.filter(product => product.id !== id)
         dispatch(deleteProductAction(nextProducts))
       })
   }
 }
 
+// firebaseのproductのデータを取り出しローカルのstoreに保存する
 export const fetchProducts = () => {
   return async(dispatch)=> {
+    // productのデータをgetし
     productsRef.orderBy('updated_at', 'desc').get()
       .then(snapshots => {
         const productList = []
         snapshots.forEach(snapshot => {
           const product = snapshot.data()
+          // 結果を1つずつproductList配列に入れる
           productList.push(product)
         })
+        // actionへdispatchしstoreへ保存
         dispatch(fetchProductsAction(productList))
       })
   }
@@ -60,14 +68,11 @@ export const saveProduct = (id, name, description, category, gender, price, size
     }
 
     // set()は全てを更新してしまうので、第２引数に{marge:true}とすることで変更部分のみをset()で変更する
-    return productsRef
-      .doc(id)
-      .set(data, { marge: true })
-      .then(() => {
-        dispatch(push("/"));
-      })
-      .catch((error) => {
-        throw new Error(error);
+    return productsRef.doc(id).set(data, {merge: true})
+    .then(() => {
+      dispatch(push('/'))
+    }).catch((error) => {
+      throw new Error(error)
       });
   };
 };
