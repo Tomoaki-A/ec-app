@@ -1,4 +1,4 @@
-import React from "react";
+import {React,useState, useCallback} from "react";
 import { makeStyles } from "@material-ui/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getIsSignedIn } from "../../../reducks/users/selectors";
 import { push  } from "connected-react-router";
 
-import { HeaderMenus } from "./index";
+import { HeaderMenus, ClosableDrawer } from "./index";
 
 
 const useStyles = makeStyles({
@@ -33,6 +33,16 @@ const Header = () => {
   const isSignedIn = getIsSignedIn(selector);
   const dispatch = useDispatch();
 
+  const [open, setOpen] = useState(false);
+
+  // ハンバーガーメニューの開閉を統括する関数
+  const handleDrawerToggle = useCallback((event)=>{
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")){
+      return;
+    }
+    setOpen(!open)
+  },[setOpen,open])
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.menuBar}>
@@ -41,11 +51,15 @@ const Header = () => {
           {/* isSignedInがtrueなら,表示 */}
           {isSignedIn && (
             <div className={classes.iconButtoms}>
-              <HeaderMenus />
+              <HeaderMenus handleDrawerToggle={handleDrawerToggle}/>
             </div>
           )}
         </Toolbar>
       </AppBar>
+      <ClosableDrawer
+      open={open}
+      onClose={handleDrawerToggle}
+      />
     </div>
   );
 };

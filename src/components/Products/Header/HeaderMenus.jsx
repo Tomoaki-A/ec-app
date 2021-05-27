@@ -6,7 +6,7 @@ import FacoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import MenuIcon from "@material-ui/icons/Menu";
 
 
-const HeaderMenus = () => {
+const HeaderMenus = (props) => {
 
   return(
      <>
@@ -18,7 +18,7 @@ const HeaderMenus = () => {
     <IconButton>
       <FacoriteBorderIcon />
     </IconButton>
-    <IconButton>
+    <IconButton onClick={(event) => props.handleDrawerToggle(event)}>
       <MenuIcon />
     </IconButton>
   </>
