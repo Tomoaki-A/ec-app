@@ -18,7 +18,7 @@ const useStyles = makeStyles({
     color: "fff",
   },
   toolBar: {
-    margin: "o auto",
+    margin: "0 auto",
     maxWidth: 1024,
     width: "100%",
   },
