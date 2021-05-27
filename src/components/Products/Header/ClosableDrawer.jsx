@@ -54,6 +54,11 @@ const ClosableDrawer = (props) => {
     dispatch(push(path))
     props.onClose(event)
   }
+// ログアウトのonClickはoperationsのサインアウトとメニューを閉じる2つを実行するため書き出し
+  const logOutonClick = (event) => {
+    props.onClose(event)
+    dispatch(signOut())
+  }
 
   // メニューで表示する情報を定義
   const menus = [
@@ -118,7 +123,7 @@ const ClosableDrawer = (props) => {
               </ListItem>
             ))}
             {/* operationsのサインアウトする処理へ飛ばす */}
-            <ListItem button key='logout' onClick={() => dispatch(signOut())}
+            <ListItem button key='logout' onClick={logOutonClick}
             >
               <ListItemIcon>
                 <ExitToAppIcon/>
