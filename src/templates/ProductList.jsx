@@ -15,7 +15,6 @@ const ProductList = () => {
   // 更新の旅にproducts配列(中身は1つ1つの商品情報)を返す
   useEffect(() => {
     dispatch(fetchProducts())
-    console.log(products)
 },[]);
 
   return(

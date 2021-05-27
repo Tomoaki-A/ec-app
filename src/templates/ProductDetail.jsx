@@ -1,9 +1,10 @@
 import {React,useState,useCallback,useEffect} from 'react'
-import { db } from '../firebase';
-import {useSelector} from "react-redux"
+import { db,FirebaseTimestamp } from '../firebase';
+import {useDispatch, useSelector} from "react-redux"
 import { makeStyles } from '@material-ui/styles';
 import HTMLReactParser from 'html-react-parser'
 import {ImageSwiper ,SizeTable} from "../components/Products/index"
+import {addProductToCart} from '../reducks/users/opeations'
 
 
 
@@ -52,8 +53,28 @@ const ProductDetail = () => {
   const path = selector.router.location.pathname;
   const id = path.split('/product/')[1];
   const [product, setProduct] =useState(null);
+  const dispatch = useDispatch();
   
 const classes = useStyles();
+
+// カートのアイコンをクリックした時に実行する関数
+// 商品の情報をFirebaseに登録するため渡す
+const addProduct = useCallback((selectedSize) => {
+  // 現在のタイムスタンプ取得
+  const timestamp = FirebaseTimestamp.now();
+  // operationsへディスパッチ
+  dispatch(addProductToCart({
+    added_at: timestamp,
+    description: product.description,
+    gender: product.description,
+    images: product.images,
+    name: product.name,
+    proce: product.price,
+    productId: product.id,
+    quantity: 1,
+    size: selectedSize,
+  }))
+},[product])
 
 // 更新のたび現在のidのデータを取得しローカルのproductに入れる
 useEffect(() => {
@@ -75,7 +96,7 @@ useEffect(() => {
           <h2 className="u-text__headline">{product.name}</h2>
           <p className={classes.price}>¥{product.price.toLocaleString()}</p>
           <div className="module-spacer--small" />
-          <SizeTable sizes={product.sizes}/>
+          <SizeTable sizes={product.sizes} addProduct={addProduct}/>
           <div className="module-spacer--small" />
           <p>{returnCodeToBr(product.description)}</p>
           </div>

@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { useSelector, useDispatch } from "react-redux";
-import { getIsSignedIn } from "../../../reducks/users/selectors";
+import { getIsSignedIn } from "../../reducks/users/selectors";
 import { push  } from "connected-react-router";
 
 import { HeaderMenus, ClosableDrawer } from "./index";

@@ -1,6 +1,26 @@
-import { signInAction, signOutAction } from "./actions";
+import { signInAction, signOutAction ,fetchProductsInCartAction} from "./actions";
 import { push } from "connected-react-router";
 import { auth, db, FirebaseTimestamp } from "../../firebase/index";
+
+// 引数として渡ってきたカートに入れる商品のデータをFirebaseのDBのuser.cartに保存
+export const addProductToCart = (addedProduct) => {
+  return async (dispatch,getState) => {
+    // ユーザーのidを取得し
+    const uid = getState().users.uid;
+    const cartRef = db.collection("users").doc(uid).collection("cart").doc();
+    // 渡ってきた商品データのcartIdをユーザーidと同じにする
+    addedProduct['cartId'] = cartRef.id;
+    await cartRef.set(addedProduct);
+    dispatch(push('/'))
+  }
+}
+
+
+export const fetchProductsInCart = (products) => {
+  return async(dispatch) => {
+    dispatch(fetchProductsInCartAction(products))
+  }
+}
 
 // リッスン
 export const listenAuthState = () => {

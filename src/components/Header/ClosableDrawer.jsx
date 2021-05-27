@@ -12,11 +12,11 @@ import AddCircleIcon from '@material-ui/icons/AddCircle'
 import HistoryIcon from '@material-ui/icons/History'
 import PersonIcon from '@material-ui/icons/Person'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import {TextInput} from '../../UIkit/index'
+import {TextInput} from '../UIkit/index'
 import {useDispatch} from 'react-redux'
 import {push} from 'connected-react-router'
 
-import {signOut} from '../../../reducks/users/opeations'
+import {signOut} from '../../reducks/users/opeations'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -96,7 +96,10 @@ const ClosableDrawer = (props) => {
         classes={{paper: classes.drawerPaper}}
         ModalProps={{keyMounter: true}}
       >
-        <div>
+        <div
+          onClose={(event) => props.onClose(event)}
+          onKeyDown={(event) => props.onClose(event)}
+        >
           <div className={classes.searchField}>
                 <TextInput 
                 fullWidth={false}
