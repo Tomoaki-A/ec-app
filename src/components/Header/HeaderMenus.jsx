@@ -16,7 +16,6 @@ const HeaderMenus = (props) => {
   const uid = getUserId(selector)
   let productsInCart = getProductsInCart(selector)
 
-  console.log(productsInCart);
   useEffect(() => {
     // ユーザーのidに紐づけられたカートの中の情報を
     const unsubscribe = db
