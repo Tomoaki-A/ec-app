@@ -32,9 +32,9 @@ const CartList = () => {
   },[])
 
    // onClickで使うトップページへ飛ぶ処理
-  const backToHome = useCallback(() => {
-    dispatch(push('/'));
-  },[])
+   const backToTop = useCallback(() => {
+    dispatch(push('/'))
+  }, []);
 
   return (
     <section className="c-section-wrapin">
@@ -51,7 +51,7 @@ const CartList = () => {
       <div className="p-grid__column">
             <PrimaryButton label={"レジへ進む"} onClick={goToOrder} />
             <div className="module-spacer--extra-small"/>
-            <GreyButton label={"ショッピングを続ける"} onclick={backToHome}/>
+            <GreyButton label={"ショッピングを続ける"} onClick={backToTop}/>
       </div>
     </section>
   );
