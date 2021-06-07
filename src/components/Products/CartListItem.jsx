@@ -29,16 +29,21 @@ const useStyles = makeStyles({
 const CartListItem = (props) => {
 
   const classes = useStyles();
+  // Selectorで操作しているユーザーのIDを取得
   const selector = useSelector((state) => state)
   const uid = getUserId(selector)
 
+  // propsで渡ってきた商品情報を定数化
   const image = props.product.images[0].path;
   const price = props.product.price.toLocaleString();
+  console.log(price)
   const name = props.product.name;
-  const size = props.product.sizes;
+  const size = props.product.size;
   
-
+// カートから消去する関数
+// 商品のカートidを受け取り
   const removeProductFromCart = (id) => {
+// カートidに対応する商品をFirebaseのデータベースから削除
     return db.collection('user').doc(uid).collection('cart').doc(id)
               .delete()
   }
@@ -53,6 +58,7 @@ const CartListItem = (props) => {
             <ListItemText primary={name} secondary={'サイズ'+size}/>
             <ListItemText primary={'¥'+price} />
         </div>
+          {/* 消去アイコンのonClickで上で定義した関数を実行 */}
         <IconButton  onClick={removeProductFromCart(props.product.cartId)}>
           <DeleteIcon/>
         </IconButton>

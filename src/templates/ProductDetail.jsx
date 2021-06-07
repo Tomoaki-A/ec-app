@@ -69,7 +69,7 @@ const addProduct = useCallback((selectedSize) => {
     gender: product.description,
     images: product.images,
     name: product.name,
-    proce: product.price,
+    price: product.price,
     productId: product.id,
     quantity: 1,
     size: selectedSize,

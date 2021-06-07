@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { db } from "../../firebase/index";
 import {fetchProductsInCart} from '../../reducks/users/opeations'
+import {push} from 'connected-react-router'
 
 const HeaderMenus = (props) => {
   const dispatch = useDispatch();
@@ -66,7 +67,7 @@ const HeaderMenus = (props) => {
 
   return (
     <>
-      <IconButton>
+      <IconButton onClick={() => dispatch(push('cart'))}>
         {/* Firebaseのuser.cartの商品情報のデータの数を表示 */}
         <Badge  badgeContent={productsInCart.length} color="secondary">
           <ShoppingCartIcon />
