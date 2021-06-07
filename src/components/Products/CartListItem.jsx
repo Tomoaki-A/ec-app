@@ -13,7 +13,7 @@ import { db } from "../../firebase/index";
 
 const useStyles = makeStyles({
   list: {
-    heught: 128,
+    height: 128,
   },
   image: {
     objectFit: "cover",
@@ -34,21 +34,20 @@ const CartListItem = (props) => {
   // propsで渡ってきた商品情報を定数化
   const image = props.product.images[0].path;
   const price = props.product.price.toLocaleString();
-  console.log(price);
   const name = props.product.name;
   const size = props.product.size;
 
   // カートから消去する関数
   // 商品のカートidを受け取り
+  // カートidに対応する商品をFirebaseのデータベースから削除
   const removeProductFromCart = (id) => {
-    // カートidに対応する商品をFirebaseのデータベースから削除
     const uid = getUserId(selector);
     return db.collection("users").doc(uid).collection("cart").doc(id).delete();
   };
 
   return (
     <>
-      <ListItem>
+      <ListItem className={classes.list}>
         <ListItemAvatar>
           <img className={classes.image} src={image} alt="商品画像" />
         </ListItemAvatar>
@@ -57,7 +56,7 @@ const CartListItem = (props) => {
           <ListItemText primary={"¥" + price} />
         </div>
         {/* 消去アイコンのonClickで上で定義した関数を実行 */}
-        <IconButton onClick={removeProductFromCart(props.product.cartId)}>
+        <IconButton onClick={() => removeProductFromCart(props.product.cartId)}>
           <DeleteIcon />
         </IconButton>
       </ListItem>
