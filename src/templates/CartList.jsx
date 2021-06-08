@@ -1,4 +1,4 @@
-import React,{useCallback} from "react";
+import React,{useCallback, useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import List from "@material-ui/core/List";
 import { getProductsInCart } from "../reducks/users/selectors";
@@ -22,8 +22,8 @@ const CartList = () => {
 
   // Selectorでカートに入っている商品情報を取得
   const selector = useSelector((state) => state);
+
   const productsInCart = getProductsInCart(selector);
-  
   const dispatch = useDispatch();
 
   // onClickで使う注文確認ページへ飛ぶ処理
@@ -58,3 +58,6 @@ const CartList = () => {
 };
 
 export default CartList;
+
+
+
