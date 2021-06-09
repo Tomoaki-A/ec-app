@@ -44,17 +44,25 @@ export const orderProduct = (productsInCart,amount) => {
       const userRef = db.collection('users').doc(uid)
       const timestamp = FirebaseTimestamp.now()
 
+      // 
       let products = [],
          soldOutProducts = [];
 
          const batch = db.batch();
 
+        //  引数で受け取ったprpductsInCartを定数productに入れていく
          for (const product of productsInCart){
+          //  商品のproductIdからその商品の情報をFirebaseから取得
            const snapshot = await productsRef.doc(product.productId).get();
+
+          //  今(注文完了前)の在庫状況を知りたいのので取得(sizesにはsizeとquantyがある)
            const sizes = snapshot.data().sizes;
 
+          //  在庫更新のため注文完了後のsizesの配列を作る
            const updateSizes = sizes.map(size => {
+            //  その商品に存在するサイズが購入されたサイズ(SとかM)と同じなら在庫量を-1する
              if(size.size === product.size) {
+              //  そもそも既に売切れてたら上で定義押したsoldOutProducts配列にpush
                if(size.quantity === 0){
                  soldOutProducts.push(product.name)
                  return size
@@ -63,6 +71,7 @@ export const orderProduct = (productsInCart,amount) => {
                  size: size.size,
                  quantity: size.quantity -1
                }
+              //  違ったらそのままのsizeを返す
              }else {
                return size
              }
