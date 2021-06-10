@@ -8,6 +8,7 @@ const initialState = {
     uid: "",
     username: "",
     cart: [],
+    orders: [],
   },
 };
 

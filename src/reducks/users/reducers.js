@@ -16,6 +16,11 @@ export const UsersReducer = (state = initialState.users, action) => {
         return{
             ...state,
             cart: [...action.payload]
+        };
+      case Actions.FETCH_ORDERS_HISTORY_ACTION:
+        return{
+            ...state,
+            orders: [...action.payload]
         }
     default:
       return state;

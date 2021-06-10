@@ -89,7 +89,7 @@ export const orderProduct = (productsInCart, amount) => {
         images: product.images,
         name: product.name,
         price: product.price,
-        size: product,
+        size: product.size,
       });
 
       //  商品情報のsize(主にquantity)を注文後のFirebaseデータに書き換えるバッチ処理
@@ -198,3 +198,4 @@ export const saveProduct = (
       });
   };
 };
+

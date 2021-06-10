@@ -1,26 +1,53 @@
-import { signInAction, signOutAction ,fetchProductsInCartAction} from "./actions";
+import {
+  signInAction,
+  signOutAction,
+  fetchProductsInCartAction,
+  fetchOrdersHistoryAction,
+} from "./actions";
 import { push } from "connected-react-router";
 import { auth, db, FirebaseTimestamp } from "../../firebase/index";
 
 // 引数として渡ってきたカートに入れる商品のデータをFirebaseのDBのuser.cartに保存
 export const addProductToCart = (addedProduct) => {
-  return async (dispatch,getState) => {
+  return async (dispatch, getState) => {
     // ユーザーのidを取得し
     const uid = getState().users.uid;
     const cartRef = db.collection("users").doc(uid).collection("cart").doc();
     // 渡ってきた商品データのcartIdをユーザーidと同じにする
-    addedProduct['cartId'] = cartRef.id;
+    addedProduct["cartId"] = cartRef.id;
     await cartRef.set(addedProduct);
-    dispatch(push('/'))
-  }
-}
+    dispatch(push("/"));
+  };
+};
 
+// Firebaseのデータ、usersの中のordersから注文履歴の情報を受け取り照準に並び替えたものをstoreへstateとして登録
+export const fetchOrdersHistory = () => {
+  return async (dispatch, getState) => {
+    const uid = getState().users.uid;
+    // 昇順に並び変えられた商品情報が配列として入る
+    const List = [];
+
+    db.collection("users")
+      .doc(uid)
+      .collection("orders")
+      // 昇順並び替え
+      .orderBy("updated_at", "desc")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((snapshot) => {
+          const data = snapshot.data();
+          List.push(data);
+        });
+        dispatch(fetchOrdersHistoryAction(List));
+      });
+  };
+};
 
 export const fetchProductsInCart = (products) => {
-  return async(dispatch) => {
-    dispatch(fetchProductsInCartAction(products))
-  }
-}
+  return async (dispatch) => {
+    dispatch(fetchProductsInCartAction(products));
+  };
+};
 
 // リッスン
 export const listenAuthState = () => {
@@ -46,7 +73,7 @@ export const listenAuthState = () => {
               })
             );
           });
-          // userが存在していなかったら(userが認証完了したいなかったら)
+        // userが存在していなかったら(userが認証完了したいなかったら)
       } else {
         // サインイン画面へ飛ばす
         dispatch(push("/signin"));
@@ -59,21 +86,27 @@ export const listenAuthState = () => {
 export const resetPassword = (email) => {
   return async (dispatch) => {
     if (email === "") {
-      alert("必須項目が未入力です")
-      return false
+      alert("必須項目が未入力です");
+      return false;
     } else {
       // Firebaseのパスワードリセットのメソッド
-      auth.sendPasswordResetEmail(email)
-      .then(() => {
-        alert('入力されたアドレスにパスワードリセット用のメールをお送りしました。')
-        dispatch(push('/signin'))
-      // もし失敗したら
-      }).catch(() => {
-        alert('パスワードリセットに失敗しました。通信環境を確認してください。')
-      })
+      auth
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          alert(
+            "入力されたアドレスにパスワードリセット用のメールをお送りしました。"
+          );
+          dispatch(push("/signin"));
+          // もし失敗したら
+        })
+        .catch(() => {
+          alert(
+            "パスワードリセットに失敗しました。通信環境を確認してください。"
+          );
+        });
     }
-  }
-}
+  };
+};
 
 // サインイン
 export const signIn = (email, password) => {
