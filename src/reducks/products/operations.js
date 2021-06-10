@@ -24,12 +24,17 @@ export const deleteProduct = (id) => {
 };
 
 // firebaseのproductのデータを取り出しローカルのstoreに保存する
-export const fetchProducts = () => {
+export const fetchProducts = (gender,category) => {
   return async (dispatch) => {
+
+    // とりあえずFirebaseから全ての商品情報を取得
+let query = productsRef.orderBy("updated_at", "desc")
+// もし引数のgenderに文字が入ってれば商品情報のgenderが引数genderと一致するもののみを抽出し変数queryを書き換える
+query = (gender !== '') ? query.where('gender', '==', gender) : query;
+query = (category !== '') ? query.where('category', '==', category) : query;
+
     // productのデータをgetし
-    productsRef
-      .orderBy("updated_at", "desc")
-      .get()
+    query.get()
       .then((snapshots) => {
         const productList = [];
         snapshots.forEach((snapshot) => {
