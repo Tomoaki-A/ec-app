@@ -1,4 +1,4 @@
-import React , {useState, useCallback}from 'react'
+import React , {useState, useCallback, useEffect}from 'react'
 import Drawer from '@material-ui/core/Drawer'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
@@ -15,8 +15,10 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import {TextInput} from '../UIkit/index'
 import {useDispatch} from 'react-redux'
 import {push} from 'connected-react-router'
+import {db} from '../../firebase/index'
 
 import {signOut} from '../../reducks/users/opeations'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,11 +56,47 @@ const ClosableDrawer = (props) => {
     dispatch(push(path))
     props.onClose(event)
   }
+
 // ログアウトのonClickはoperationsのサインアウトとメニューを閉じる2つを実行するため書き出し
   const logOutonClick = (event) => {
     props.onClose(event)
     dispatch(signOut())
   }
+
+  const [filters, setFilters] = useState([
+    {
+      func: selectMenu,
+      label: 'すべて',
+      id: 'all',
+      value: '/'
+    },
+    {
+      func: selectMenu,
+      label: 'メンズ',
+      id: 'male',
+      value: '/?gender=male'
+    },
+    {
+      func: selectMenu,
+      label: 'レディース',
+      id: 'female',
+      value: '/?gender=female'
+    },
+  ])
+
+  // ライフサイクル
+  // メンズとかレディースとかのfilter配列に商品カテゴリーをFirebaseから取得し追加する
+  useEffect(() => {
+    db.collection('categories').orderBy("order", "asc").get()
+        .then(snapshots => {
+            const list = []
+            snapshots.forEach(snapshot => {
+                const category = snapshot.data()
+                list.push({func: selectMenu, label: category.name, id: category.id, value: `/?category=${category.id}`})
+            })
+            setFilters(prevState => [...prevState, ...list])
+        });
+},[])
 
   // メニューで表示する情報を定義
   const menus = [
@@ -133,6 +171,16 @@ const ClosableDrawer = (props) => {
               </ListItemIcon>
               <ListItemText primary={'Logout'}/>
             </ListItem>
+          </List>
+          <Divider/>
+          <List>
+            {/* 性別と商品カテゴリーの情報が入ったfilter配列を1つずつ表示する */}
+            {filters.map(filter => (
+              <ListItem button key={filter.id} onClick={(e) => filter.func(e,filter.value)}> 
+                 <ListItemText primary={filter.label} />
+              </ListItem>
+             
+            ))}
           </List>
         </div>
 
