@@ -7,7 +7,10 @@ import {
 import { push } from "connected-react-router";
 import { auth, db, FirebaseTimestamp } from "../../firebase/index";
 
-// 引数として渡ってきたカートに入れる商品のデータをFirebaseのDBのuser.cartに保存
+// operationsファイル
+// 受け取ったデータを処理しFirebaseに登録する役割とローカルのstoreに保存するため処理したデータをactionsに渡す役割
+
+// カートに入れた商品のデータをFirebaseのDBのuser.cartに保存する
 export const addProductToCart = (addedProduct) => {
   return async (dispatch, getState) => {
     // ユーザーのidを取得し
@@ -20,7 +23,7 @@ export const addProductToCart = (addedProduct) => {
   };
 };
 
-// Firebaseのデータ、usersの中のordersから注文履歴の情報を受け取り照準に並び替えたものをstoreへstateとして登録
+// Firebaseのから注文履歴の情報を取得し昇順に並び替えたものをstoreへローカルstateとして登録
 export const fetchOrdersHistory = () => {
   return async (dispatch, getState) => {
     const uid = getState().users.uid;
@@ -43,6 +46,8 @@ export const fetchOrdersHistory = () => {
   };
 };
 
+// ????
+// ただデータをactionsに送ってるだけ
 export const fetchProductsInCart = (products) => {
   return async (dispatch) => {
     dispatch(fetchProductsInCartAction(products));
@@ -89,7 +94,7 @@ export const resetPassword = (email) => {
       alert("必須項目が未入力です");
       return false;
     } else {
-      // Firebaseのパスワードリセットのメソッド
+      // Firebaseのパスワードリセットのメソッドauth
       auth
         .sendPasswordResetEmail(email)
         .then(() => {
@@ -118,7 +123,6 @@ export const signIn = (email, password) => {
       return false;
     }
 
-    // りた〜ん
     // Firebaseでサインインするメソッド
     auth.signInWithEmailAndPassword(email, password).then((result) => {
       const user = result.user;
@@ -169,7 +173,6 @@ export const signUp = (username, email, password, confirmPassword) => {
       return false;
     }
 
-    // りた〜ん
     // Firebaseで設定したauthのユーザーを作るメソッド
     return auth
       .createUserWithEmailAndPassword(email, password)
