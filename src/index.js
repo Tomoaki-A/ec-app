@@ -21,7 +21,6 @@ ReactDOM.render(
       <MuiThemeProvider theme={theme}>
          <App />
       </MuiThemeProvider>
-     
     </ConnectedRouter>
   </Provider>,
   document.getElementById("root")

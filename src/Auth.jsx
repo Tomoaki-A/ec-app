@@ -3,11 +3,14 @@ import { getIsSignedIn } from "./reducks/users/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { listenAuthState } from "./reducks/users/opeations";
 
+// Routerコンポーネントで<Auth>でラップされたコンポーネントにs癖酢しようとした時実行される
+// 認証済みか確認し認証済みならアクセスを試みたコンポーネントへ(children)、未認証ならlistenAuthStateを実行
 const Auth = ({ children }) => {
   const dispatch = useDispatch();
-  // storeから全stateを取得
+
+  // storeから全stateを取得する
+  // selectores.jsで定義したgetIsSignedIn()によって現在サインインしているか否か確認
   const selector = useSelector((state) => state);
-  //selectores.jsで定義したgetIsSignedIn()によって現在サインインしているか否か確認
   const isSignedIn = getIsSignedIn(selector);
 
   // hooksのuseEffectはclassコンポーネントでのライフサイクルメソッドにあたる(componentDidMount)
